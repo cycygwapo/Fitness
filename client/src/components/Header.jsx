@@ -27,7 +27,7 @@ function Header({ userData }) {
         return;
       }
 
-      const response = await fetch('http://localhost:5000/api/notifications', {
+      const response = await fetch('https://fitness-mmqs.onrender.com/api/notifications', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Accept': 'application/json'
@@ -63,7 +63,7 @@ function Header({ userData }) {
         return;
       }
 
-      const response = await fetch(`http://localhost:5000/api/notifications/${notificationId}/read`, {
+      const response = await fetch(`https://fitness-mmqs.onrender.com/api/notifications/${notificationId}/read`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -97,7 +97,7 @@ function Header({ userData }) {
       >
         {userData?.profilePicture ? (
           <img
-            src={`http://localhost:5000${userData.profilePicture}`}
+            src={`https://fitness-mmqs.onrender.com${userData.profilePicture}`}
             alt="Profile"
             className="w-full h-full object-cover"
             onError={(e) => {
