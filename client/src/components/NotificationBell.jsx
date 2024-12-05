@@ -22,7 +22,7 @@ function NotificationBell() {
         return;
       }
 
-      const response = await fetch('http://localhost:5000/api/notifications', {
+      const response = await fetch('https://fitness-mmqs.onrender.com/api/notifications', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Accept': 'application/json'
@@ -53,7 +53,7 @@ function NotificationBell() {
       const token = localStorage.getItem('userToken');
       if (!token) return;
 
-      const response = await fetch(`http://localhost:5000/api/notifications/${notificationId}/read`, {
+      const response = await fetch(`https://fitness-mmqs.onrender.com/api/notifications/${notificationId}/read`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
