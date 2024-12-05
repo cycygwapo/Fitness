@@ -1,0 +1,56 @@
+/* Theme variables */
+:root {
+  --bg-primary: #202c34;
+  --bg-secondary: #1a1f2a;
+  --text-primary: #ffffff;
+  --text-secondary: #9ca3af;
+  --accent-color: #10b981;
+  --border-color: #374151;
+}
+
+/* Apply theme variables */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.bg-primary {
+  background-color: var(--bg-primary);
+}
+
+.bg-secondary {
+  background-color: var(--bg-secondary);
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.border-theme {
+  border-color: var(--border-color);
+}
+
+/* Update specific component styles */
+.profile-container {
+  background-color: var(--bg-secondary);
+}
+
+.nav-bar {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.modal-content {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.input-field {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
