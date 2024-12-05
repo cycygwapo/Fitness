@@ -10,7 +10,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'Fit Time',
+        name: 'Fit Times',
         short_name: 'Fit Time',
         description: 'Your personal fitness companion',
         theme_color: '#ffffff',
