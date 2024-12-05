@@ -21,7 +21,7 @@ function Booking() {
       const token = localStorage.getItem('userToken');
       if (!token) return;
 
-      const response = await fetch('http://localhost:5000/api/classes/my-classes', {
+      const response = await fetch('https://fitness-mmqs.onrender.com/api/classes/my-classes', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -35,7 +35,7 @@ function Booking() {
 
   const fetchClasses = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/classes');
+      const response = await fetch('https://fitness-mmqs.onrender.com/api/classes');
       const data = await response.json();
       
       // Sort classes by date to show most recent first
@@ -57,7 +57,7 @@ function Booking() {
         return;
       }
 
-      const response = await fetch(`http://localhost:5000/api/classes/${classId}/book`, {
+      const response = await fetch(`https://fitness-mmqs.onrender.com/api/classes/${classId}/book`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
