@@ -648,7 +648,7 @@ const Profile = () => {
                           <div className="flex items-center space-x-4">
                             {userData?.profilePicture ? (
                               <img
-                                src={`https://fitness-mmqs.onrender.com${userData.profilePicture}`}
+                                src={`https://fitness-mmqs.onrender.com/api${userData.profilePicture}`}
                                 alt="Profile"
                                 className="w-16 h-16 rounded-full object-cover ring-2 ring-emerald-500"
                                 onError={(e) => {
