@@ -775,7 +775,7 @@ const Profile = () => {
               <div className="w-32 h-32 rounded-full overflow-hidden bg-[#1a1f2a] mb-4 relative group">
                 {userData?.profilePicture ? (
                   <img
-                    src={`http://localhost:5000${userData.profilePicture}`}
+                    src={`https://fitness-mmqs.onrender.com/api${userData.profilePicture}`}
                     alt="Profile"
                     className="w-full h-full object-cover"
                     onError={(e) => {
