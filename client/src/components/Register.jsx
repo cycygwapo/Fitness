@@ -38,7 +38,7 @@ function Register() {
     }
     
     try {
-      const response = await axios.post('https://fitness-mmqs.onrender.com/api/users/register', {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/users/register`, {
         name: formData.name,
         email: formData.email,
         password: formData.password

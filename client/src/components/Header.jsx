@@ -4,6 +4,7 @@ import logo from '../assets/logo.png';
 import lightmodelogo from '../assets/lightmodelogo.png';
 import { useTheme } from '../context/ThemeContext';
 import NotificationBell from './NotificationBell';
+import config from '../config';
 
 function Header({ userData }) {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ function Header({ userData }) {
         return;
       }
 
-      const response = await fetch('https://fitness-mmqs.onrender.com/api/notifications', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/notifications`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Accept': 'application/json'
@@ -63,7 +64,7 @@ function Header({ userData }) {
         return;
       }
 
-      const response = await fetch(`https://fitness-mmqs.onrender.com/api/notifications/${notificationId}/read`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/notifications/${notificationId}/read`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -97,7 +98,7 @@ function Header({ userData }) {
       >
         {userData?.profilePicture ? (
           <img
-            src={`https://fitness-mmqs.onrender.com${userData.profilePicture}`}
+            src={`${import.meta.env.VITE_API_URL}${userData.profilePicture}`}
             alt="Profile"
             className="w-full h-full object-cover"
             onError={(e) => {

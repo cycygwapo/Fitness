@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import logo from '../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
+import config from '../config';
 
 function Booking() {
   const navigate = useNavigate();
@@ -21,12 +22,12 @@ function Booking() {
       const token = localStorage.getItem('userToken');
       if (!token) return;
 
-      const response = await fetch('https://fitness-mmqs.onrender.com/api/classes/my-classes', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/classes/my-classes`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-      const data = await response.json();
+     const data = await response.json();
       setUserBookings(data);
     } catch (error) {
       console.error('Error fetching user bookings:', error);
@@ -35,7 +36,7 @@ function Booking() {
 
   const fetchClasses = async () => {
     try {
-      const response = await fetch('https://fitness-mmqs.onrender.com/api/classes');
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/classes`);
       const data = await response.json();
       
       // Sort classes by date to show most recent first
@@ -57,7 +58,7 @@ function Booking() {
         return;
       }
 
-      const response = await fetch(`https://fitness-mmqs.onrender.com/api/classes/${classId}/book`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/classes/${classId}/book`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
