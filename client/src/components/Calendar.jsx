@@ -290,8 +290,8 @@ const CalendarComponent = () => {
         </h2>
 
         <div className="h-full flex flex-col">
-          {/* Calendar Container - Reduced height */}
-          <div className="mb-4">
+          {/* Calendar Container - Fixed height */}
+          <div className="mb-4 flex-shrink-0">
             <Calendar
               className={`custom-calendar ${theme === 'light' ? 'bg-[#89A8B2]' : 'bg-[#1a1f2a]'} rounded-lg shadow-lg p-2 border border-gray-800`}
               tileClassName={tileClassName}
@@ -302,92 +302,117 @@ const CalendarComponent = () => {
             />
           </div>
 
-          {/* Upcoming Bookings Container - Takes remaining space */}
-          <div className={`flex-1 overflow-auto ${theme === 'light' ? 'bg-[#89A8B2]' : 'bg-[#1a1f2a]'} rounded-lg shadow-lg p-4 border border-gray-800`}>
-            <h2 className="text-xl font-bold mb-4 text-center">
-              Your Upcoming Classes
-            </h2>
+          {/* Upcoming Bookings Container - Scrollable with visible scrollbar */}
+          <div 
+            className={`
+              flex-1 
+              overflow-y-auto 
+              ${theme === 'light' ? 'bg-[#89A8B2]' : 'bg-[#1a1f2a]'} 
+              rounded-lg 
+              shadow-lg 
+              border 
+              border-gray-800
+              scrollbar-thin
+              scrollbar-thumb-emerald-500
+              scrollbar-track-gray-700
+              hover:scrollbar-thumb-emerald-600
+              relative
+            `}
+            style={{
+              scrollbarWidth: 'thin',
+              scrollbarColor: '#10b981 #374151'
+            }}
+          >
+            {/* Fixed Header */}
+            <div className={`sticky top-0 ${theme === 'light' ? 'bg-[#89A8B2]' : 'bg-[#1a1f2a]'} p-4 z-20 shadow-md`}>
+              <h2 className="text-xl font-bold text-center">
+                Your Upcoming Classes
+              </h2>
+            </div>
             
-            {userBookings.length === 0 ? (
-              <div className="text-center py-4">
-                <p className="text-gray-400 mb-4">No upcoming classes booked yet</p>
-                <button 
-                  onClick={() => navigate('/bookings')}
-                  className="inline-block px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
-                >
-                  Book a Class
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-[calc(100%-3rem)]">
-                {userBookings.map((booking, index) => {
-                  const bookingDate = new Date(booking.date);
-                  bookingDate.setHours(...booking.time.split(':'));
-                  
-                  return (
-                    <div
-                      key={booking._id}
-                      className={`${
-                        theme === 'light' ? 'bg-white' : 'bg-[#202c34]'
-                      } rounded-lg p-3 shadow-md border ${
-                        theme === 'light' ? 'border-gray-200' : 'border-gray-700'
-                      } transform transition-all duration-200 hover:scale-[1.02]`}
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className={`px-2 py-1 rounded-full text-xs ${getDotColor(index)} text-white`}>
-                          {formatTime(booking.time)}
-                        </span>
-                        <span className="text-xs text-gray-500">
-                          {bookingDate.toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric'
-                          })}
-                        </span>
-                      </div>
-                      
-                      <h3 className="text-base font-semibold text-emerald-500 mb-2">
-                        {booking.className}
-                      </h3>
-                      
-                      <div className="space-y-1 text-xs">
-                        <div className="flex items-center space-x-1" key={`instructor-row-${booking._id}`}>
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                          </svg>
-                          <span>Instructor: {booking.instructor}</span>
+            {/* Content with padding to account for fixed header */}
+            <div className="p-4 pt-0">
+              {userBookings.length === 0 ? (
+                <div className="text-center py-4">
+                  <p className="text-gray-400 mb-4">No upcoming classes booked yet</p>
+                  <button 
+                    onClick={() => navigate('/bookings')}
+                    className="inline-block px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
+                  >
+                    Book a Class
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-3 pb-20">
+                  {userBookings.map((booking, index) => {
+                    const bookingDate = new Date(booking.date);
+                    bookingDate.setHours(...booking.time.split(':'));
+                    
+                    return (
+                      <div
+                        key={booking._id}
+                        className={`${
+                          theme === 'light' ? 'bg-white' : 'bg-[#202c34]'
+                        } rounded-lg p-3 shadow-md border ${
+                          theme === 'light' ? 'border-gray-200' : 'border-gray-700'
+                        } transform transition-all duration-200 hover:scale-[1.02]`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span className={`px-2 py-1 rounded-full text-xs ${getDotColor(index)} text-white`}>
+                            {formatTime(booking.time)}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            {bookingDate.toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric'
+                            })}
+                          </span>
                         </div>
                         
-                        <div className="flex items-center space-x-1" key={`place-row-${booking._id}`}>
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                          </svg>
-                          <span>{booking.place}</span>
+                        <h3 className="text-base font-semibold text-emerald-500 mb-2">
+                          {booking.className}
+                        </h3>
+                        
+                        <div className="space-y-1 text-xs">
+                          <div className="flex items-center space-x-1" key={`instructor-row-${booking._id}`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            <span>Instructor: {booking.instructor}</span>
+                          </div>
+                          
+                          <div className="flex items-center space-x-1" key={`place-row-${booking._id}`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span>{booking.place}</span>
+                          </div>
+                        </div>
+                        
+                        <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                          <button
+                            onClick={() => {
+                              console.log('Booking data:', booking);
+                              if (!booking._id && !booking.id) {
+                                console.error('Invalid booking data:', booking);
+                                toast.error('Invalid booking ID');
+                                return;
+                              }
+                              setBookingToCancel(booking);
+                              setShowCancelDialog(true);
+                            }}
+                            className="w-full px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm font-medium transition-colors duration-200 ease-in-out"
+                          >
+                            Cancel Class
+                          </button>
                         </div>
                       </div>
-                      
-                      <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                        <button
-                          onClick={() => {
-                            console.log('Booking data:', booking);
-                            if (!booking._id && !booking.id) {
-                              console.error('Invalid booking data:', booking);
-                              toast.error('Invalid booking ID');
-                              return;
-                            }
-                            setBookingToCancel(booking);
-                            setShowCancelDialog(true);
-                          }}
-                          className="w-full px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm font-medium transition-colors duration-200 ease-in-out"
-                        >
-                          Cancel Class
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

@@ -16,6 +16,10 @@ const classSchema = mongoose.Schema(
             required: true,
             enum: ['Cardio', 'Flexibility', 'Strength Training', 'Yoga', 'Meditation']
         },
+        exerciseType: {
+            type: String,
+            required: true
+        },
         date: {
             type: Date,
             required: true

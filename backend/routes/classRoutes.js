@@ -36,6 +36,7 @@ router.get('/instructor-classes', auth, async (req, res) => {
     const classes = await Class.find({ instructor: req.user._id })
       .sort({ date: 1, time: 1 });
 
+    console.log('Found classes details:', classes);
     console.log('Found classes:', classes.length);
     res.json({ 
       success: true,
@@ -72,9 +73,11 @@ router.get('/', async (req, res) => {
 router.post('/', auth, async (req, res) => {
   console.log('Accessing create class route');
   console.log('User:', req.user);
+  console.log('Request body:', req.body);
   
   try {
-    const { category, date, time, place, maxParticipants } = req.body;
+    const { category, exerciseType, date, time, place, maxParticipants } = req.body;
+    console.log('Exercise Type:', exerciseType);
     
     if (!req.user || !req.user.role) {
       console.log('No user or role found:', req.user);
@@ -91,6 +94,7 @@ router.post('/', auth, async (req, res) => {
       instructor: req.user._id,
       instructorName: req.user.name,
       category,
+      exerciseType,
       date,
       time,
       place,
@@ -139,7 +143,9 @@ router.post('/:id/book', auth, async (req, res) => {
     // Create a new booking
     const booking = new Booking({
       userId,
+      classId: classToBook._id,
       className: classToBook.category,
+      exerciseType: classToBook.exerciseType,
       instructor: classToBook.instructor,
       date: classToBook.date,
       time: classToBook.time,
@@ -196,7 +202,7 @@ router.put('/:id', auth, async (req, res) => {
       });
     }
 
-    const { category, date, time, place } = req.body;
+    const { category, exerciseType, date, time, place } = req.body;
     const classId = req.params.id;
 
     const classToUpdate = await Class.findById(classId);
@@ -217,7 +223,7 @@ router.put('/:id', auth, async (req, res) => {
 
     const updatedClass = await Class.findByIdAndUpdate(
       classId,
-      { category, date, time, place },
+      { category, exerciseType, date, time, place },
       { new: true }
     );
 

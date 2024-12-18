@@ -43,6 +43,7 @@ const Profile = () => {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [classData, setClassData] = useState({
     category: '',
+    exerciseType: '',
     date: '',
     time: '',
     place: ''
@@ -242,7 +243,7 @@ const Profile = () => {
 
       if (response.ok) {
         toast.success('Class created successfully!');
-        setClassData({ category: '', date: '', time: '', place: '' });
+        setClassData({ category: '', exerciseType: '', date: '', time: '', place: '' });
         setShowCreateClassDialog(false);
       } else {
         throw new Error(data.message || 'Failed to create class');
@@ -274,7 +275,7 @@ const Profile = () => {
 
       if (response.ok) {
         toast.success('Class updated successfully!');
-        setClassData({ category: '', date: '', time: '', place: '' });
+        setClassData({ category: '', exerciseType: '', date: '', time: '', place: '' });
         setShowCreateClassDialog(false);
         setEditingClass(null);
         fetchInstructorClasses(); // Refresh the classes list
@@ -431,6 +432,7 @@ const Profile = () => {
     setEditingClass(classData);
     setClassData({
       category: classData.category,
+      exerciseType: classData.exerciseType,
       date: classData.date.split('T')[0],
       time: classData.time,
       place: classData.place
@@ -820,26 +822,29 @@ const Profile = () => {
       </div>
 
       {/* Recent Activity Section */}
-      <div className={`mt-8 rounded-lg shadow-lg p-4 ${
-        theme === 'light' ? 'bg-[#B3C8CF]' : 'bg-[#1a1f2a]'
-      }`}>
-        <h2 className={`text-2xl font-bold mb-3 ${
-          theme === 'light' ? 'text-black' : 'text-white'
-        }`}>Recent Activity</h2>
-        <div className="space-y-2">
-          {recentBookings.map((booking) => (
+      <div className={`${theme === 'light' ? 'bg-[#B3C8CF]' : 'bg-[#1a1f2a]'} rounded-lg p-4 mb-4`}>
+        <h2 className={`text-xl font-bold mb-4 ${theme === 'light' ? 'text-black' : 'text-white'}`}>
+          Recent Activity
+        </h2>
+        <div className="space-y-3">
+          {recentBookings.map((booking, index) => (
             <div
-              key={booking.id}
+              key={booking._id || index}
               className={`px-3 py-2 rounded-lg flex items-center group ${
-                theme === 'light' ? 'bg-[#B3C8CF]' : 'bg-[#1a1f2a]'
+                theme === 'light' ? 'bg-[#B3C8CF]' : 'bg-[#202c34]'
               }`}
             >
               <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
-              <span className={`text-base ${
-                theme === 'light' ? 'text-black' : 'text-white'
-              }`}>
-                {booking.className}
-              </span>
+              <div className="flex-1">
+                <span className={`text-base ${
+                  theme === 'light' ? 'text-black' : 'text-white'
+                }`}>
+                  {booking.className}
+                </span>
+                <span className="text-sm text-gray-400 ml-2">
+                  ({booking.exerciseType})
+                </span>
+              </div>
               <div className={`ml-auto flex items-center text-xs ${
                 theme === 'light' ? 'text-gray-600' : 'text-gray-400'
               }`}>
@@ -849,11 +854,10 @@ const Profile = () => {
               </div>
             </div>
           ))}
-          {recentBookings.length === 0 && (
-            <div className={`text-center py-4 ${
-              theme === 'light' ? 'text-gray-600' : 'text-gray-400'
-            }`}>
-              <span className="text-sm">No recent bookings</span>
+          
+          {(!recentBookings || recentBookings.length === 0) && (
+            <div className="text-center text-gray-400 py-4">
+              No recent activity
             </div>
           )}
         </div>
@@ -897,6 +901,18 @@ const Profile = () => {
                   <option key={category} value={category}>{category}</option>
                 ))}
               </select>
+            </div>
+
+            {/* Exercise Type Input - New Addition */}
+            <div className="mb-5">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Exercise Type</label>
+              <input
+                type="text"
+                value={classData.exerciseType || ''}
+                onChange={(e) => setClassData({ ...classData, exerciseType: e.target.value })}
+                placeholder="Enter exercise type"
+                className="w-full bg-[#2a303c] text-white rounded-xl p-3 border border-gray-700 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all outline-none"
+              />
             </div>
 
             {/* Date Input */}
@@ -966,7 +982,7 @@ const Profile = () => {
               <button
                 onClick={() => {
                   setShowCreateClassDialog(false);
-                  setClassData({ category: '', date: '', time: '', place: '' });
+                  setClassData({ category: '', exerciseType: '', date: '', time: '', place: '' });
                   setEditingClass(null);
                 }}
                 className="flex-1 bg-gray-600/50 text-white py-3 rounded-xl font-semibold hover:bg-gray-600 transition-colors"
@@ -1268,6 +1284,7 @@ const Profile = () => {
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-white">{classItem.category}</h3>
                       <div className="text-gray-400 space-y-1 mt-1">
+                        <p>Exercise Type: {classItem.exerciseType}</p>
                         <p>Date: {new Date(classItem.date).toLocaleDateString()}</p>
                         <p>Time: {formatTime(classItem.time)}</p>
                         <p>Place: {classItem.place}</p>

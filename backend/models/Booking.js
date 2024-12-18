@@ -15,6 +15,10 @@ const bookingSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  exerciseType: {
+    type: String,
+    required: true
+  },
   instructor: {
     type: String,
     required: true
