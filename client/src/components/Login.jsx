@@ -27,6 +27,7 @@ function Login() {
       });
 
       if (response.data && response.data.token) {
+        // Store the token and user data
         localStorage.setItem('userToken', response.data.token);
         localStorage.setItem('userData', JSON.stringify({
           name: response.data.name,
@@ -34,11 +35,28 @@ function Login() {
           role: response.data.role
         }));
         
+        // Verify the token works by making a test request
+        try {
+          const testResponse = await axios.get(`${config.API_URL}/users/profile`, {
+            headers: {
+              'Authorization': `Bearer ${response.data.token}`
+            }
+          });
+          if (testResponse.data) {
+            console.log('Authentication verified successfully');
+          }
+        } catch (testError) {
+          console.error('Token verification failed:', testError);
+          toast.error('Login successful but session verification failed. Please try again.');
+          setIsLoading(false);
+          return;
+        }
+        
         // Add a delay before showing success message and redirecting
         setTimeout(() => {
           toast.success('Successfully logged in!');
           navigate('/home');
-        }, 5000); // 2 second delay
+        }, 1000);
       } else {
         setIsLoading(false);
         toast.error('Invalid response from server');
